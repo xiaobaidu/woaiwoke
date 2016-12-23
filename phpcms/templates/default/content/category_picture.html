@@ -1,0 +1,159 @@
+{template "content","header"}
+<style>
+    .category-image-box{
+        width: 1200px;margin: 0 auto;padding: 20px 10px;
+    }
+    .category-box{
+        width: 147px;
+    }
+    .category-box h4{
+        margin: 5px 0;
+    }
+    .category-box-a{
+        color: #9b9b9b;  white-space: nowrap;  float: left; width: 49px;  height: 26px;  line-height: 26px;  text-align: left;
+    }
+    .category-box a:hover{color: red}
+    .category-left{
+        float: left;width: 147px;  padding: 0px 10px 16px 18px;  background: #ddd;float: left;border-radius:2px;opacity:0.8
+    }
+    .category-right{
+        background: #eeeeee;width: 1000px;height: 500px;margin: 0px 0px 10px 10px;float: right
+    }
+</style>
+{if $top_parentid}
+<div class="category-image-box">
+    <div class="category-left">
+        <div class="category-box">
+            <h4>{$catname}</h4>
+            {pc:content action="category" catid="$top_parentid" num="15" siteid="$siteid" order="listorder ASC"}
+            {loop $data $r}
+            <a href="{$r[url]}" class="category-box-a">{$r[catname]}</a>
+            {/loop}
+            {/pc}
+        </div>
+    </div>
+
+    <div class="category-right">
+        {loop $array_child $cid}
+        {php $chlidids = explode(',', $CATEGORYS[$cid][arrchildid])}
+        {php unset($chlidids[array_search($cid, $chlidids)]);$n=1;}
+        {pc:content action="lists" catid="$cid" num="10" order="id DESC"}
+            {if $data}
+                <div class="photo-cat">
+                    <div class="content">
+                        <ul class="photo-list picbig">
+                            {loop $data $r}
+                            <li>
+                                <div class="img-wrap">
+                                    <a href="{$r[url]}" title="{$r[title]}" target="_blank"><img src="{thumb($r[thumb],150,112)}" /></a>
+                                </div>
+                                <a href="{$r[url]}" title="{$r[title]}" target="_blank">{str_cut($r[title],28)}</a>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                </div>
+            {/if}
+        {/pc}
+        <div class="bk10"></div>
+        {/loop}
+    </div>
+</div>
+{/if}
+
+
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<hr/>
+<hr/>
+<!--main-->
+<div class="main photo-channel">
+	<div class="col-left photo-slide">
+        <div class="content">
+            <div class="FocusPic">
+            	<div id="photo-slide">
+                    <div class="changeDiv">
+					{pc:content action="position" posid="8" order="listorder DESC" sort="desc" num="9"}
+						{loop $data $r}
+                        <a href="{$r['url']}" title="{$r['title']}"><img src="{thumb($r['thumb'],435, 290)}" alt="{$r['title']}" /></a>
+						{/loop}
+					{/pc}
+                    </div>
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+$(function(){
+	slide("#photo-slide","cur",435,324,1);
+})
+</script>
+    </div>
+    <div class="photo-hots">
+        <div class="icon"></div>
+        	<h4>热点关注</h4>
+        	<ul class="content photo-hot picbig">
+			{pc:content action="hits" catid="$catid" num="6" order="monthviews DESC"}
+				{loop $data $r}
+					<li>
+                    <div class="img-wrap">
+                        <a href="{$r[url]}" title="{$r[title]}" target="_blank"><img src="{thumb($r[thumb],150,112)}" /></a>
+                    </div>
+                    <a href="{$r[url]}" title="{$r[title]}" target="_blank">{str_cut($r[title],16, '')}</a>
+                </li>
+				{/loop}
+			{/pc}
+            </ul>
+    </div>
+    <div class="col-auto" style="height:336px">
+    <div class="box">
+            <h5 class="title-2">图片排行</h5>
+            <ul class="content digg">
+             {pc:content action="hits" catid="$catid" num="8" order="views DESC" cache="3600"}
+				{loop $data $r}
+					<li><a href="{$r[url]}" title="{$r[title]}" target="_blank">{$r[title]}</a></li>
+				{/loop}
+			{/pc}
+            </ul>
+    </div>
+    <div class="bk6"></div>
+    <script language="javascript" src="{APP_PATH}caches/poster_js/3.js"></script>
+    </div>
+    <div class="bk10"></div>
+	{loop $array_child $cid}
+	{php $chlidids = explode(',', $CATEGORYS[$cid][arrchildid])}
+	{php unset($chlidids[array_search($cid, $chlidids)]);$n=1;}
+    <div class="photo-cat">
+        <div class="content">
+        	<h5>
+            <a href="{$CATEGORYS[$cid][url]}"><strong>{$CATEGORYS[$cid][catname]}</strong></a>
+			<span class="blue">
+            <a href="{$CATEGORYS[$cid][url]}" class="more">更多>></a>
+			{loop $chlidids $chlidid}
+            {if $n!=1} | {/if}
+				<a href="{$CATEGORYS[$chlidid][url]}">{$CATEGORYS[$chlidid][catname]}</a>
+			{/loop}
+			</span>
+			</h5>
+            <ul class="photo-list picbig">
+				{pc:content action="lists" catid="$cid" num="10" order="id DESC"}
+					{loop $data $r}
+					<li>
+                    <div class="img-wrap">
+                        <a href="{$r[url]}" title="{$r[title]}" target="_blank"><img src="{thumb($r[thumb],150,112)}" /></a>
+                    </div>
+                    <a href="{$r[url]}" title="{$r[title]}" target="_blank">{str_cut($r[title],28)}</a>
+					</li>
+					{/loop}
+				{/pc}
+            </ul>
+        </div>
+    </div>
+	<div class="bk10"></div>
+	{/loop}
+</div>
+{template "content","footer"}
